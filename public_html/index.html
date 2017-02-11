@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="CatsWeb">
+<head>
+<title>CatsWeb</title>
+<link rel="stylesheet" href="newcss.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-resource.js"></script>
+<script src="controller.js"></script>
+</head>
+
+<body  ng-controller="CatsCntrl">
+    
+    <div class='boxes'>
+        <div class='box' ng-repeat="cat in cats">
+            <div class='box1'>
+                <div class='imgBox'>
+                    <img src="http://www.rd.com/wp-content/uploads/sites/2/2016/02/01-13-things-you-didnt-know-about-cats-earthquakes.jpg" width="150" alt="">
+                </div>  
+            </div>
+            <div class='box1'>
+                <div class='textbox'>
+                    <div>Name: {{cat.name}}</div>
+                    <div>Age: {{cat.age}}</div>
+                    <div>Breed: {{cat.breed}}</div>
+                </div>
+            </div>
+            <div class='box1'>
+                <div class='textbox'>
+                    <div>Change</div>
+                    <div>Delete</div>
+                </div>
+            </div>
+        </div> 
+        
+        <div class='box'>
+            <form class="form-horizontal" style="padding-top:20px" role="form" ng-submit="addRow()">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Name</label>
+                    <div class="col-md-4">
+                            <input type="text" class="form-control" style="width:200px" name="name"
+                                    ng-model="name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Age</label>
+                    <div class="col-md-4">
+                            <input type="text" class="form-control" style="width:200px" name="age"
+                                    ng-model="age" />
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label class="col-md-2 control-label">Breed</label>
+                        <div class="col-md-4">
+                                <input type="text" class="form-control" style="width:200px" name="breed"
+                                        ng-model="breed" />
+                        </div>
+                </div>
+                <div class="form-group">								
+                        <div style="padding-left:110px">
+                                <input type="submit" value="Submit" class="btn btn-primary"/>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div> 
+</body>
+
+</html>

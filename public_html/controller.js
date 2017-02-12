@@ -5,26 +5,64 @@ catApp.config(['$httpProvider', function ($httpProvider) {
 }]);
 
 catApp.controller("CatsCntrl", function($scope, $window, $http) {
+    
+    $scope.editingData = {};
+    
     $http.get("http://localhost:8080/rest/cat/").then(function (response) {
       $scope.cats = response.data;
+      for (var i = 0, length = $scope.tabelsData.length; i < length; i++) {
+        $scope.editingData[$scope.cats[i].id] = false;
+      }
     });
+
+    $scope.modify = function(cat){
+        $scope.editingData[cat.id] = true;
+    };
+
+
+    $scope.cancel = function(cat){
+        $scope.editingData[cat.id] = false;
+    };
     
+    $scope.update = function(cat){
+        $scope.editingData[cat.id] = false;
+        
+        $http.put("http://localhost:8080/rest/cat/update", cat).
+        success(function() {
+        }).
+        error(function(data) {
+            alert( "failure message: " + JSON.stringify({data: data}));
+        });
+        
+    };
     $scope.addRow = function(){		
 
-            var data = 'name=' + $scope.name + '&age=' + $scope.age+ '&breed=' + $scope.breed;
+        var data = 'name=' + $scope.name + '&age=' + $scope.age+ '&breed=' + $scope.breed;
 
-            $http.post("http://localhost:8080/rest/cat/add", data).
-            success(function(data, status, headers, config) {
-		$scope.message = data;
-                $window.location.reload();
-            }).
-            error(function(data, status, headers, config) {
-		alert( "failure message: " + JSON.stringify({data: data}));
-            });
+        $http.post("http://localhost:8080/rest/cat/add", data).
+        success(function(data) {
+            $scope.message = data;
+            $window.location.reload();
+        }).
+        error(function(data) {
+            alert( "failure message: " + JSON.stringify({data: data}));
+        });
             
-            $scope.name='';
-            $scope.age='';
-            $scope.breed='';
-    };  
+        $scope.name='';
+        $scope.age='';
+        $scope.breed='';
+    }; 
+    
+    $scope.removeRow = function(id){
+        
+        var url = "http://localhost:8080/rest/cat/delete/" + id;
+        
+        $http.delete(url).
+        success(function(){
+            $window.location.reload();
+        }).error(function(data){
+           alert("failure message: " + JSON.stringify({data : data}));
+        });
+    };
 });
 

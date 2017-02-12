@@ -4,7 +4,6 @@
 <title>CatsWeb</title>
 <link rel="stylesheet" href="newcss.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-resource.js"></script>
@@ -22,15 +21,45 @@
             </div>
             <div class='box1'>
                 <div class='textbox'>
-                    <div>Name: {{cat.name}}</div>
-                    <div>Age: {{cat.age}}</div>
-                    <div>Breed: {{cat.breed}}</div>
+                    <div ng-hide="editingData[cat.id]">ID: {{cat.id}}</div>
+                    <div ng-hide="editingData[cat.id]">Name: {{cat.name}}</div>
+                    <div ng-hide="editingData[cat.id]">Age: {{cat.age}}</div>
+                    <div ng-hide="editingData[cat.id]">Breed: {{cat.breed}}</div>
+                    <form class="form-horizontal" role="form" ng-show="editingData[cat.id]">
+                        <div class="form-group" style="margin-bottom: 3px">
+                            <label class="col-md-4 control-label">ID </label>
+                            <div class="col-md-2 control-label"> {{cat.id}}</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 3px">
+                            <label class="col-md-4 control-label">Name</label>
+                            <div class="col-md-4">
+                                    <input type="text" class="form-control" style="width:100px" name="name"
+                                            ng-model="cat.name" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 3px">
+                            <label class="col-md-4 control-label">Age</label>
+                            <div class="col-md-4">
+                                    <input type="text" class="form-control" style="width:100px" name="age"
+                                            ng-model="cat.age" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-md-4 control-label">Breed</label>
+                                <div class="col-md-4">
+                                        <input type="text" class="form-control" style="width:100px" name="breed"
+                                                ng-model="cat.breed" />
+                                </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class='box1'>
                 <div class='textbox'>
-                    <div>Change</div>
-                    <div>Delete</div>
+                    <div><input style="margin-bottom: 3px" type="button" value="Modify" class="btn btn-primary" ng-hide="editingData[cat.id]" ng-click="modify(cat)"/></div>
+                    <div><input style="margin-bottom: 3px" type="button" value="Update" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="update(cat)"/></div>
+                    <div><input style="margin-bottom: 3px" type="button" value="Cancel" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="cancel(cat)"/></div>
+                    <div><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(cat.id)"/></div>
                 </div>
             </div>
         </div> 

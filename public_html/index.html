@@ -59,7 +59,7 @@
                     <div><input style="margin-bottom: 3px" type="button" value="Modify" class="btn btn-primary" ng-hide="editingData[cat.id]" ng-click="modify(cat)"/></div>
                     <div><input style="margin-bottom: 3px" type="button" value="Update" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="update(cat)"/></div>
                     <div><input style="margin-bottom: 3px" type="button" value="Cancel" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="cancel(cat)"/></div>
-                    <div><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(cat.id)"/></div>
+                    <div><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(cat.id, $index)"/></div>
                 </div>
             </div>
         </div> 

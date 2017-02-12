@@ -41,8 +41,8 @@ catApp.controller("CatsCntrl", function($scope, $window, $http) {
 
         $http.post("http://localhost:8080/rest/cat/add", data).
         success(function(data) {
-            $scope.message = data;
-            $window.location.reload();
+            $scope.cats[$scope.cats.length] = data;
+            $scope.editingData[data.id] = false;
         }).
         error(function(data) {
             alert( "failure message: " + JSON.stringify({data: data}));
@@ -53,13 +53,14 @@ catApp.controller("CatsCntrl", function($scope, $window, $http) {
         $scope.breed='';
     }; 
     
-    $scope.removeRow = function(id){
+    $scope.removeRow = function(id, $index){
         
         var url = "http://localhost:8080/rest/cat/delete/" + id;
         
         $http.delete(url).
         success(function(){
-            $window.location.reload();
+            $scope.cats.splice($index, 1);
+            //$window.location.reload();
         }).error(function(data){
            alert("failure message: " + JSON.stringify({data : data}));
         });

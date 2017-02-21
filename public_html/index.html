@@ -2,6 +2,7 @@
 <html ng-app="CatsWeb">
 <head>
 <title>CatsWeb</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <link rel="stylesheet" href="newcss.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -11,12 +12,92 @@
 </head>
 
 <body  ng-controller="CatsCntrl">
-    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="">CatsWeb</a>
+          </div>
+            <input type="button" value="AddCat" class="btn btn-default navbar-btn" ng-click="boxAddCat=!boxAddCat"/>
+            <input type="button" value="SearchCat" class="btn btn-default navbar-btn" ng-click="SearchCatBox()"/>
+        </div>
+      </nav>
     <div class='boxes'>
-        <div class='box' ng-repeat="cat in cats">
+        <div class='box' ng-show="boxAddCat">
+            <form class="form-horizontal" style="padding-top:20px" role="form" ng-submit="addCat()">
+                <input type="file" class="custom-file-input" file-model="imgCat">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Name</label>
+                    <div class="col-md-4">
+                            <input type="text" class="form-control" style="width:200px" name="name"
+                                    ng-model="name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Age</label>
+                    <div class="col-md-4">
+                            <input type="number" class="form-control" style="width:200px" name="age"
+                                    ng-model="age" />
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label class="col-md-2 control-label">Breed</label>
+                        <div class="col-md-4">
+                                <input type="text" class="form-control" style="width:200px" name="breed"
+                                        ng-model="breed" />
+                        </div>
+                </div>
+                <div class="form-group">								
+                        <div style="padding-left:80px">
+                                <input type="submit" value="Submit" class="btn btn-primary"  ng-click="boxAddCat=!boxAddCat"/>
+                        </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class='box' ng-show="boxSearchCat">
+            <form class="form-horizontal" style="padding-top:20px" role="form" ng-submit="searchCancel()">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Search By: </label>
+                    <div class="col-md-4">
+                            <select ng-model="queryBy">
+                                <option value="$">Any</option>
+                                <option value="id">Id</option>
+                                <option value="name">Name</option>
+                                <option value="age">Age</option>
+                                <option value="breed">Breed</option>
+                            </select>   
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Search: </label>
+                    <div class="col-md-4">
+                     <div ng-switch="queryBy">
+                          <input type="number" class="form-control" ng-switch-when="id" style="width:200px"
+                                    ng-model="query[queryBy]"/>
+                          <input type="number" class="form-control" ng-switch-when="age" style="width:200px"
+                                    ng-model="query[queryBy]"/>
+                          <input type="text" class="form-control" ng-switch-default style="width:200px"
+                                    ng-model="query[queryBy]"/>
+                     </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Equality: </label>
+                     <input type="checkbox" ng-model="strict">
+                </div>
+                <div class="form-group">								
+                        <div style="padding-left:80px">
+                                <input type="submit" value="Cancel" class="btn btn-primary"  ng-click="boxSearchCat=!boxSearchCat"/>
+                        </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class='box' ng-repeat="cat in cats | filter:query:strict">
             <div class='box1'>
                 <div class='imgBox'>
-                    <img src="http://www.rd.com/wp-content/uploads/sites/2/2016/02/01-13-things-you-didnt-know-about-cats-earthquakes.jpg" width="150" alt="">
+                    <img ng-src="http://localhost:8080/rest/cat/files/{{cat.imgName}}" width="150" alt="Description" />
+                    <input ng-show="editingData[cat.id]" type="file" class="custom-file-input" file-model="imgCatUp">
                 </div>  
             </div>
             <div class='box1'>
@@ -27,8 +108,7 @@
                     <div ng-hide="editingData[cat.id]">Breed: {{cat.breed}}</div>
                     <form class="form-horizontal" role="form" ng-show="editingData[cat.id]">
                         <div class="form-group" style="margin-bottom: 3px">
-                            <label class="col-md-4 control-label">ID </label>
-                            <div class="col-md-2 control-label"> {{cat.id}}</div>
+                            <label class="col-md-4 control-label">ID: {{cat.id}}</label>
                         </div>
                         <div class="form-group" style="margin-bottom: 3px">
                             <label class="col-md-4 control-label">Name</label>
@@ -40,7 +120,7 @@
                         <div class="form-group" style="margin-bottom: 3px">
                             <label class="col-md-4 control-label">Age</label>
                             <div class="col-md-4">
-                                    <input type="text" class="form-control" style="width:100px" name="age"
+                                    <input type="number" class="form-control" style="width:100px" name="age"
                                             ng-model="cat.age" />
                             </div>
                         </div>
@@ -57,42 +137,11 @@
             <div class='box1'>
                 <div class='textbox'>
                     <div><input style="margin-bottom: 3px" type="button" value="Modify" class="btn btn-primary" ng-hide="editingData[cat.id]" ng-click="modify(cat)"/></div>
-                    <div><input style="margin-bottom: 3px" type="button" value="Update" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="update(cat)"/></div>
+                    <div><input style="margin-bottom: 3px" type="button" value="Update" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="update(cat, imgCatUp)"/></div>
                     <div><input style="margin-bottom: 3px" type="button" value="Cancel" class="btn btn-primary" ng-show="editingData[cat.id]" ng-click="cancel(cat)"/></div>
                     <div><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(cat.id, $index)"/></div>
                 </div>
             </div>
-        </div> 
-        
-        <div class='box'>
-            <form class="form-horizontal" style="padding-top:20px" role="form" ng-submit="addRow()">
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Name</label>
-                    <div class="col-md-4">
-                            <input type="text" class="form-control" style="width:200px" name="name"
-                                    ng-model="name" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Age</label>
-                    <div class="col-md-4">
-                            <input type="text" class="form-control" style="width:200px" name="age"
-                                    ng-model="age" />
-                    </div>
-                </div>
-                <div class="form-group">
-                        <label class="col-md-2 control-label">Breed</label>
-                        <div class="col-md-4">
-                                <input type="text" class="form-control" style="width:200px" name="breed"
-                                        ng-model="breed" />
-                        </div>
-                </div>
-                <div class="form-group">								
-                        <div style="padding-left:110px">
-                                <input type="submit" value="Submit" class="btn btn-primary"/>
-                        </div>
-                </div>
-            </form>
         </div>
     </div> 
 </body>

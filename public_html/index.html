@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Search By: </label>
                     <div class="col-md-4">
-                            <select ng-model="queryBy">
+                            <select class="form-control" ng-model="queryBy">
                                 <option value="$">Any</option>
                                 <option value="id">Id</option>
                                 <option value="name">Name</option>
@@ -82,8 +82,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Equality: </label>
-                     <input type="checkbox" ng-model="strict">
+                     <label class="col-md-2 control-label">Equality: </label>
+                        <div class="col-md-4">
+                            <input type="checkbox" ng-model="strict">
+                        </div>
                 </div>
                 <div class="form-group">								
                         <div style="padding-left:80px">
